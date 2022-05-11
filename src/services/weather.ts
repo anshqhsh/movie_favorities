@@ -7,7 +7,7 @@ interface Params {
   lat: number
   lon: number
 }
-
+// https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 // 37.494958, 126.844128
 export const getWeatherForecast5DaysApi = (params: Params) =>
   axios.get<IWeatherAPIRes>(`${WEATHER_BASE_URL}/forecast`, {
