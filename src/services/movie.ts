@@ -3,8 +3,8 @@ import { axios } from 'hooks/worker'
 const BASE_URL = 'http://www.omdbapi.com'
 
 interface Params {
-  apikey: string
   s: string
+  apikey: string
   page: number
 }
 

@@ -1,38 +1,39 @@
 import { useEffect, useState } from 'react'
+import MovieItem from 'routes/MovieItem'
 import { getGripMovieApi } from 'services/movie'
+
 import styles from './movieSearch.module.scss'
 // import { useRecoil } from 'hooks/state'
-// import { todoListState } from 'states/todo'
 
 const MovieSearch = () => {
-  const [searchData, setSearchData] = useState('')
-  const [movieData, setMovieData] = useState([])
-  const handleAddClick = () => {}
+  const [search, setSearch] = useState('') // input에서 값을 받아 검색
+  const [movieData, setMovieData] = useState<IMovieItem[]>()
+
+  const handleAddClick = () => {} // *** search 기능 구현
 
   useEffect(() => {
     getGripMovieApi({
-      apikey: '92e32667',
-      s: 'ionman',
+      s: 'ion', // 검색어
+      apikey: '1f3dc839',
       page: 2,
-    }).then((res: any) => {
-      console.log(res)
-      setSearchData(res.data)
-      console.log(res.data)
+    }).then((res) => {
+      setMovieData(res.data.Search)
     })
   }, [])
 
-  if (!movieData) return null
-
+  const formChangeHandler = (e: any) => {
+    setSearch(e.currentTarget.value)
+  }
+  console.log(movieData)
   return (
-    <div className={styles.todoList}>
-      MovieSearch
-      <div className={styles.centering}>
-        <h1>Hi! this is your assignment.</h1>
-        <ul className={styles.tasks}>
-          <p className={styles.tasksTitle}>Today&apos;s</p>
-        </ul>
-        <button type='button' className={styles.addButton} onClick={handleAddClick} aria-label='Add button' />
-      </div>
+    <div className={styles.movieContainer}>
+      <h1>MovieSearch</h1>
+      <form className={styles.searchForm}>
+        <input type='text' placeholder='Search Movie' onChange={formChangeHandler} />
+      </form>
+      {movieData?.map((item) => (
+        <MovieItem key={item.imdbID} {...item} />
+      ))}
     </div>
   )
 }
