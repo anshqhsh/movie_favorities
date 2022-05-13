@@ -3,13 +3,11 @@
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/mixins/position';
 
-.movieContainer {
+.movieItem {
   position: relative;
   width: 360px;
-  height: 720px;
-  padding: 120px 40px 40px;
-  background-color: #fafbfe;
-  border-radius: 60px;
+  height: 50px;
+  border: 1px colors.$RED solid;
 
   h1 {
     font-size: 32px;
