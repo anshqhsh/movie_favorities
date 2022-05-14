@@ -6,31 +6,52 @@ import styles from './movieSearch.module.scss'
 // import { useRecoil } from 'hooks/state'
 
 const MovieSearch = () => {
-  const [search, setSearch] = useState('') // input에서 값을 받아 검색
+  const [search, setSearch] = useState('movie') // input에서 값을 받아 검색
   const [movieData, setMovieData] = useState<IMovieItem[]>([])
   const [error, setError] = useState('')
   const [idxPage, setIdxPage] = useState<number>(1)
+  const [isLoading, setIsLoading] = useState(false)
 
   // console.log('', movieData)
-  // *** search 기능 구현
-  const handleAddClick = () => {}
+  // const getApiPage = (search, page) => {}
 
-  console.log('key', process.env.REACT_APP_APIKEY)
   useEffect(() => {
+    setIsLoading(true)
     getGripMovieApi({
-      s: 'movie', // 검색어
+      s: search, // 검색어
       apikey: '1f3dc839',
       page: idxPage,
     })
       .then((res) => {
         // console.log(res)
+        setIsLoading(false)
         setMovieData(res.data.Search)
       })
       .catch(onError)
-  }, [idxPage])
+  }, [idxPage, search])
 
   // 스크롤시 추가할 내용
-  const handleScroll = useCallback((): void => {}, [])
+  const handleScroll = useCallback((): void => {
+    const { innerHeight } = window // 브라우저창 내용 크기(스크롤포함x)
+    const { scrollHeight } = document.body // 브라우저의 총크기 스크롤 포함
+    const { scrollTop } = document.documentElement // 현재 스크롤바 위치
+
+    // 맨 하단에 도착
+    if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
+      setIdxPage(1 + idxPage) // page값을 늘려주고
+      getGripMovieApi({
+        s: search, // 검색어
+        apikey: '1f3dc839',
+        page: idxPage,
+      })
+        .then((res) => {
+          // console.log(res)
+          setMovieData(movieData.concat(res.data.Search))
+          console.log(movieData)
+        })
+        .catch(onError)
+    }
+  }, [search, idxPage])
 
   // Infinity Scroll
   useEffect(() => {
@@ -40,13 +61,15 @@ const MovieSearch = () => {
       window.removeEventListener('scroll', handleScroll, true)
       // 해당 컴포넌트가 언마운트 될때 스크롤 이벤트를 제거해 줘얗한다.
     }
-  })
+  }, [handleScroll])
+
   // error check
   const onError = (err: any) => {
     setError(err.toString())
     setTimeout(() => {
       setError('')
     }, 3000)
+    clearTimeout()
   }
 
   const formChangeHandler = (e: any) => {
@@ -63,6 +86,7 @@ const MovieSearch = () => {
       {movieData?.map((item) => (
         <MovieItem key={item.imdbID} {...item} />
       ))}
+      {isLoading && <div>Loading</div>}
     </div>
   )
 }
