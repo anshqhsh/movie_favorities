@@ -4,7 +4,7 @@ const BASE_URL = 'http://www.omdbapi.com'
 
 interface Params {
   s: string
-  apikey: string
+  apikey: string | undefined
   page: number
 }
 

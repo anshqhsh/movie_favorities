@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react'
-import { getGripMovieApi } from 'services/movie'
+import { useState } from 'react'
+
 import styles from './movieItem.module.scss'
-// import { useRecoil } from 'hooks/state'
-// import { todoListState } from 'states/todo'
 
 const MovieItem = (item: IMovieItem) => {
   const [onFavorite, setOnFavorite] = useState(false)
-  const { Title, Year } = item
-  console.log('', item)
+  const { Title, Year, imdbID, Type, Poster } = item
+  console.log(item)
 
   // 이부분을 localstorage에서 관리해야할 듯
   const OnFavoriteHandler = () => {
@@ -15,8 +13,14 @@ const MovieItem = (item: IMovieItem) => {
   }
   return (
     <div className={styles.movieItem}>
-      {Title}
-      {Year}
+      <img className={styles.poster} src={Poster} alt='poster' />
+      <div className={styles.titleWraper}>
+        <h3>{Title}</h3>
+        <div className={styles.tag}>
+          <span className={styles.tagName}>{Type}</span>
+        </div>
+        <span className={styles.year}>{Year}</span>
+      </div>
     </div>
   )
 }
