@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import MovieItem from 'routes/MovieItem'
+import Spinner from 'routes/_shared/Spinner'
 import { getGripMovieApi } from 'services/movie'
 
 import styles from './movieSearch.module.scss'
@@ -12,9 +13,6 @@ const MovieSearch = () => {
   const [idxPage, setIdxPage] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(false)
 
-  // console.log('', movieData)
-  // const getApiPage = (search, page) => {}
-
   useEffect(() => {
     setIsLoading(true)
     getGripMovieApi({
@@ -23,7 +21,6 @@ const MovieSearch = () => {
       page: idxPage,
     })
       .then((res) => {
-        // console.log(res)
         setIsLoading(false)
         setMovieData(res.data.Search)
       })
@@ -45,13 +42,12 @@ const MovieSearch = () => {
         page: idxPage,
       })
         .then((res) => {
-          // console.log(res)
-          setMovieData(movieData.concat(res.data.Search))
-          console.log(movieData)
+          const data = res.data.Search
+          setMovieData(movieData.concat(data))
         })
         .catch(onError)
     }
-  }, [search, idxPage])
+  }, [search, idxPage, movieData])
 
   // Infinity Scroll
   useEffect(() => {
@@ -83,10 +79,10 @@ const MovieSearch = () => {
         <input className={styles.searchInput} type='text' placeholder='Search Movie' onChange={formChangeHandler} />
       </form>
       {error && <div>{error}</div>}
-      {movieData?.map((item) => (
-        <MovieItem key={item.imdbID} {...item} />
+      {movieData?.map((item, idx) => (
+        <MovieItem key={(item.imdbID, `${idx}`)} {...item} />
       ))}
-      {isLoading && <div>Loading</div>}
+      {isLoading && <Spinner />}
     </div>
   )
 }

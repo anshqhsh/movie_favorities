@@ -1,20 +1,24 @@
 @use '/src/styles/constants/colors';
 @use '/src/styles/mixins/position';
 
-.gnb {
+.tab {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   padding: 24px 0;
-  border-bottom: 1px solid colors.$GRAYE;
+  margin: 10px;
+  width: 300px;
+  border-bottom: 2px solid colors.$GRAYE;
 
   ul {
     display: flex;
+    width: 100%;
+    justify-content: space-around;
   }
 
   li {
     + li {
-      margin-left: 14px;
+      margin-left: px;
     }
   }
 
@@ -25,10 +29,5 @@
     &.isActive {
       font-weight: 600;
     }
-  }
-
-  .language {
-    @include position.absolute(50% 24px auto auto);
-    transform: translateY(-50%);
   }
 }
