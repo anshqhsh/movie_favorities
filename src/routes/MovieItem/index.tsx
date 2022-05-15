@@ -30,11 +30,18 @@ const MovieItem = (item: IMovieItem) => {
   const closeModal = () => {
     setIsOpenModal(false)
   }
+  const afterOpenModal = () => {}
 
   return (
     <div className={styles.movieItem}>
       {isOpenModal && (
-        <Modal isOpen={openModal} onRequestClose={closeModal} style={customStyles} contentLabel='Example Modal'>
+        <Modal
+          isOpen={openModal}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel='Example Modal'
+        >
           modal
         </Modal>
       )}
