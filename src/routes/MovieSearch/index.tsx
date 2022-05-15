@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
 import MovieItem from 'routes/MovieItem'
-import Spinner from 'routes/_shared/Spinner'
+import Spinner from 'routes/Spinner'
 import { getGripMovieApi } from 'services/movie'
-
 import styles from './movieSearch.module.scss'
-// import { useRecoil } from 'hooks/state'
+import { debounce } from 'lodash'
+import { useRecoil } from 'hooks/state'
+import { movieListState, favoriteListState } from 'states/movie'
 
 const MovieSearch = () => {
   const [search, setSearch] = useState('movie') // input에서 값을 받아 검색
-  const [movieData, setMovieData] = useState<IMovieItem[]>([])
+  // const [movieData, setMovieData] = useState<IMovieItem[]>([])
   const [error, setError] = useState('')
   const [idxPage, setIdxPage] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [movieData, setMovieData] = useRecoil(movieListState)
+  const [favoriteData, setFavoriteDat] = useRecoil(favoriteListState)
 
   useEffect(() => {
     setIsLoading(true)
@@ -35,6 +38,9 @@ const MovieSearch = () => {
 
     // 맨 하단에 도착
     if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
+      setIsLoading(true)
+      console.log('하단')
+      console.log(idxPage)
       setIdxPage(1 + idxPage) // page값을 늘려주고
       getGripMovieApi({
         s: search, // 검색어
@@ -43,7 +49,9 @@ const MovieSearch = () => {
       })
         .then((res) => {
           const data = res.data.Search
-          setMovieData(movieData.concat(data))
+          console.log(data)
+          setMovieData((movieData as any[]).concat(data))
+          setIsLoading(false)
         })
         .catch(onError)
     }
@@ -51,7 +59,7 @@ const MovieSearch = () => {
 
   // Infinity Scroll
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, true)
+    window.addEventListener('scroll', debounce(handleScroll, 1000), true)
     // 스크롤 발생때 handleScroll 함수 호출 추가
     return () => {
       window.removeEventListener('scroll', handleScroll, true)

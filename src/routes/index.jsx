@@ -1,8 +1,8 @@
 import styles from './Routes.module.scss'
 import { Routes, Route } from 'react-router-dom'
-import TodoList from './TodoList'
-import Header from 'routes/_shared/Header'
+import Header from 'routes/Header'
 import MovieSearch from './MovieSearch'
+import MovieFavorite from './MovieFavorite'
 
 const App = () => {
   return (
@@ -12,8 +12,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<MovieSearch />} />
           <Route path='search' element={<MovieSearch />} />
-          {/* <Route path='favorite' element={<MovieFavorite />} /> */}
-          <Route path='favorite' element={<TodoList />} />
+          <Route path='favorite' element={<MovieFavorite />} />
           <Route path='*' element={<div>404</div>} />
         </Routes>
       </div>

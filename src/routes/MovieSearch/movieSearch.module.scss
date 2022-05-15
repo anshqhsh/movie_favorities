@@ -6,10 +6,9 @@
 .movieContainer {
   position: relative;
   width: 360px;
-  height: 720px;
+  height: 600px;
   padding: 20px;
-  background-color: #fafbfe;
-  border-radius: 60px;
+  overflow: scroll;
 
   h1 {
     margin: 10px;

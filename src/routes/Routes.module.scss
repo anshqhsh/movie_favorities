@@ -1,9 +1,15 @@
 @use '/src/styles/constants/colors';
 
-.app {
+.appWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 100%;
+}
+.app {
+  padding: 10px;
+  height: 100%;
+  border: 2px red solid;
+  margin: 0 auto;
 }
